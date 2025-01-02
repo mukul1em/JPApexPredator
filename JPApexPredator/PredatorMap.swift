@@ -6,13 +6,38 @@
 //
 
 import SwiftUI
+import MapKit
 
 struct PredatorMap: View {
+    @State var position: MapCameraPosition
+    let predators = Predators()
+     
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        Map(position: $position) {
+            ForEach(predators.apexPredator) {
+                predator in
+                Annotation(predator.name,
+                           coordinate: predator.location
+                ){
+                    Image(predator.image)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(height: 100 )
+                        .shadow(color: .white, radius: 3 )
+                        .scaleEffect(x: -1 )
+                     
+                }
+            }
+        }
     }
 }
 
 #Preview {
-    PredatorMap()
+    PredatorMap(position: .camera(MapCamera(
+        centerCoordinate: Predators().apexPredator[2].location ,
+        distance: 1000,
+        heading: 250,
+    pitch: 80)))
+    .preferredColorScheme(.dark)
 }
+  
